@@ -1,6 +1,9 @@
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import PropTypes from 'prop-types'
+import { format } from 'date-fns'
+import TrashIcon from '@heroicons/react/24/solid/TrashIcon'
 import {
+  IconButton,
+  SvgIcon,
   Avatar,
   Box,
   Card,
@@ -13,27 +16,20 @@ import {
   TablePagination,
   TableRow,
   Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
-import { getInitials } from 'src/utils/get-initials';
+} from '@mui/material'
+import { Scrollbar } from 'src/components/scrollbar'
+import { getInitials } from 'src/utils/get-initials'
 
 export const CustomersTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     page = 0,
     rowsPerPage = 0,
     selected = []
-  } = props;
-
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
+  } = props
 
   return (
     <Card>
@@ -42,94 +38,60 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
+                <TableCell>
+                  ID
                 </TableCell>
                 <TableCell>
-                  Name
+                  Operation Type
                 </TableCell>
                 <TableCell>
-                  Email
+                  Operation Response
                 </TableCell>
                 <TableCell>
-                  Location
+                  Date
                 </TableCell>
                 <TableCell>
-                  Phone
-                </TableCell>
-                <TableCell>
-                  Signed Up
+                  Delete
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
+              {items.map((record) => {
+                const isSelected = selected.includes(record._id)
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={record._id}
                     selected={isSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(customer.id);
-                          } else {
-                            onDeselectOne?.(customer.id);
-                          }
-                        }}
-                      />
+                    <TableCell>
+                      {record._id}
                     </TableCell>
                     <TableCell>
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                      >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.name)}
-                        </Avatar>
-                        <Typography variant="subtitle2">
-                          {customer.name}
-                        </Typography>
-                      </Stack>
+                      {record.operation}
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {'' + record.operationResponse}
                     </TableCell>
                     <TableCell>
-                      {customer.address.city}, {customer.address.state}, {customer.address.country}
+                      {record.date}
                     </TableCell>
                     <TableCell>
-                      {customer.phone}
-                    </TableCell>
-                    <TableCell>
-                      {createdAt}
+                      <IconButton>
+                        <SvgIcon fontSize='small'>
+                          <TrashIcon />
+                        </SvgIcon>
+                      </IconButton>
                     </TableCell>
                   </TableRow>
-                );
+                )
               })}
             </TableBody>
           </Table>
         </Box>
       </Scrollbar>
       <TablePagination
-        component="div"
+        component='div'
         count={count}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
@@ -138,8 +100,8 @@ export const CustomersTable = (props) => {
         rowsPerPageOptions={[5, 10, 25]}
       />
     </Card>
-  );
-};
+  )
+}
 
 CustomersTable.propTypes = {
   count: PropTypes.number,
@@ -153,4 +115,4 @@ CustomersTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array
-};
+}

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react'
 import {
   Box,
   Button,
@@ -9,7 +9,7 @@ import {
   Divider,
   TextField,
   Unstable_Grid2 as Grid
-} from '@mui/material';
+} from '@mui/material'
 
 const states = [
   {
@@ -28,7 +28,7 @@ const states = [
     value: 'los-angeles',
     label: 'Los Angeles'
   }
-];
+]
 
 export const AccountProfileDetails = () => {
   const [values, setValues] = useState({
@@ -38,35 +38,35 @@ export const AccountProfileDetails = () => {
     phone: '',
     state: 'los-angeles',
     country: 'USA'
-  });
+  })
 
   const handleChange = useCallback(
     (event) => {
       setValues((prevState) => ({
         ...prevState,
         [event.target.name]: event.target.value
-      }));
+      }))
     },
     []
-  );
+  )
 
   const handleSubmit = useCallback(
     (event) => {
-      event.preventDefault();
+      event.preventDefault()
     },
     []
-  );
+  )
 
   return (
     <form
-      autoComplete="off"
+      autoComplete='off'
       noValidate
       onSubmit={handleSubmit}
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader='Choose the operation and run'
+          title='Calculator'
         />
         <CardContent sx={{ pt: 0 }}>
           <Box sx={{ m: -1.5 }}>
@@ -80,9 +80,8 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  helperText="Please specify the first name"
-                  label="First name"
-                  name="firstName"
+                  label='Operand A'
+                  name='firstName'
                   onChange={handleChange}
                   required
                   value={values.firstName}
@@ -94,86 +93,23 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Last name"
-                  name="lastName"
+                  label='Operand B'
+                  name='lastName'
                   onChange={handleChange}
                   required
                   value={values.lastName}
                 />
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                  fullWidth
-                  label="Email Address"
-                  name="email"
-                  onChange={handleChange}
-                  required
-                  value={values.email}
-                />
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phone"
-                  onChange={handleChange}
-                  type="number"
-                  value={values.phone}
-                />
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                  fullWidth
-                  label="Country"
-                  name="country"
-                  onChange={handleChange}
-                  required
-                  value={values.country}
-                />
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                  fullWidth
-                  label="Select State"
-                  name="state"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.state}
-                >
-                  {states.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
               </Grid>
             </Grid>
           </Box>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
-            Save details
+          <Button variant='contained'>
+            Run
           </Button>
         </CardActions>
       </Card>
     </form>
-  );
-};
+  )
+}
