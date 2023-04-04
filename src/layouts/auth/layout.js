@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
-import NextLink from 'next/link';
-import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material';
-import { Logo } from 'src/components/logo';
+import PropTypes from 'prop-types'
+import NextLink from 'next/link'
+import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material'
+import { Logo } from 'src/components/logo'
 
 // TODO: Change subtitle text
 
 export const Layout = (props) => {
-  const { children } = props;
+  const { children } = props
 
   return (
     <Box
-      component="main"
+      component='main'
       sx={{
         display: 'flex',
         flex: '1 1 auto'
@@ -31,7 +31,7 @@ export const Layout = (props) => {
           }}
         >
           <Box
-            component="header"
+            component='header'
             sx={{
               left: 0,
               p: 3,
@@ -42,7 +42,7 @@ export const Layout = (props) => {
           >
             <Box
               component={NextLink}
-              href="/"
+              href='/'
               sx={{
                 display: 'inline-flex',
                 height: 32,
@@ -70,42 +70,42 @@ export const Layout = (props) => {
         >
           <Box sx={{ p: 3 }}>
             <Typography
-              align="center"
-              color="inherit"
+              align='center'
+              color='inherit'
               sx={{
                 fontSize: '24px',
                 lineHeight: '32px',
                 mb: 1
               }}
-              variant="h1"
+              variant='h1'
             >
               Welcome to{' '}
               <Box
-                component="a"
-                sx={{ color: '#15B79E' }}
-                target="_blank"
+                component='a'
+                sx={{ color: '#6366F1' }}
+                target='_blank'
               >
-                Devias Kit
+                Calculator
               </Box>
             </Typography>
             <Typography
-              align="center"
+              align='center'
               sx={{ mb: 3 }}
-              variant="subtitle1"
+              variant='subtitle1'
             >
               A professional kit that comes with ready-to-use MUI components.
             </Typography>
             <img
-              alt=""
-              src="/assets/auth-illustration.svg"
+              alt=''
+              src='/assets/auth-illustration.svg'
             />
           </Box>
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
 Layout.prototypes = {
   children: PropTypes.node
-};
+}
