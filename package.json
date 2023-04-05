@@ -6,7 +6,7 @@
   "homepage": "https://devias.io",
   "private": false,
   "scripts": {
-    "dev": "next",
+    "dev": "JWT_PUBLIC_KEY='mV+VF4lH8/Z7eekRDFzYsxY4JYFZZZ7DEba2e2ZHLKg=' next",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -27,6 +27,8 @@
     "axios": "^1.3.4",
     "date-fns": "2.29.3",
     "formik": "2.2.9",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
     "next": "13.1.6",
     "nprogress": "0.2.0",
     "prop-types": "15.8.1",

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { login, logout } from '../services/auth-service'
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -75,7 +76,7 @@ export const AuthProvider = (props) => {
     let isAuthenticated = false
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true'
+      isAuthenticated = typeof window.localStorage.getItem('token') !== 'undefined'
     } catch (err) {
       console.error(err)
     }
@@ -107,35 +108,14 @@ export const AuthProvider = (props) => {
     []
   )
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true')
-    } catch (err) {
-      console.error(err)
-    }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    }
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    })
-  }
-
   const signIn = async (username, password) => {
-    if (username !== 'calc' || password !== 'calc') {
-      throw new Error('Please check your username and password')
-    }
-
     try {
-      window.sessionStorage.setItem('authenticated', 'true')
-    } catch (err) {
-      console.error(err)
+      const response = await login({ username, password })
+      window.localStorage.setItem('authenticated', 'true')
+      window.localStorage.setItem('accessToken', response.accessToken)
+      window.localStorage.setItem('user', JSON.stringify({ userId: response.userId, username }))
+    } catch (error) {
+      throw new Error('Please check your username and password')
     }
 
     const user = {
@@ -156,6 +136,7 @@ export const AuthProvider = (props) => {
   }
 
   const signOut = () => {
+    logout()
     dispatch({
       type: HANDLERS.SIGN_OUT
     })
@@ -165,7 +146,6 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
         signOut
