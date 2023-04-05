@@ -6,14 +6,36 @@ import { Calculator } from 'src/sections/calculator/calculator'
 import { calculateBasic } from 'src/services/calculator-service'
 import { CalculatorResult } from 'src/sections/calculator/calculator-result'
 
+const TOO_MANY_REQUESTS_HTTP_STATUS = 429
+const BAD_REQUEST_HTTP_STATUS = 400
+const UNAUTHORIZED_HTTP_STATUS = 401
+
 const CalculatorHome = () => {
   const [result, setResult] = useState()
+  const [error, setError] = useState()
 
   const handleRunCalculation = async (params) => {
     console.log('params', params)
-    const response = await calculateBasic(params)
-    console.log('response', response)
-    setResult(response?.data.operationResponse)
+    try {
+      const response = await calculateBasic(params)
+      console.log('response', response)
+      setResult(response?.data.operationResponse)
+    } catch (err) {
+      console.log('err', err)
+      if (err.response.status === TOO_MANY_REQUESTS_HTTP_STATUS) {
+        setError({ message: 'Not enough balance' })
+        return
+      }
+      if (err.response.status === BAD_REQUEST_HTTP_STATUS) {
+        setError({ message: 'Please check your input, only numbers are valid' })
+        return
+      }
+      if (err.response.status === UNAUTHORIZED_HTTP_STATUS) {
+        setError({ message: 'Session expired' })
+        return
+      }
+      setError({ message: 'Oops! There was an error on this calculation. Please try again or check logs' })
+    }
   }
 
   return (
@@ -47,7 +69,7 @@ const CalculatorHome = () => {
                   md={6}
                   lg={6}
                 >
-                  <Calculator onRun={handleRunCalculation} />
+                  <Calculator onRun={handleRunCalculation} error={error} />
                 </Grid>
                 <Grid
                   xs={12}

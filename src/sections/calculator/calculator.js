@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   CardHeader,
   Divider,
   TextField,
+  Alert,
   Unstable_Grid2 as Grid
 } from '@mui/material'
 
@@ -34,29 +35,21 @@ const operations = [
   }
 ]
 
-export const Calculator = ({ onRun }) => {
+export const Calculator = ({ onRun, error }) => {
   const [values, setValues] = useState({
-    firstParam: 10,
-    secondParam: 20,
+    firstParam: 5,
+    secondParam: 5,
     operationType: 'addition'
   })
 
-  const handleChange = useCallback(
-    (event) => {
-      setValues((prevState) => ({
-        ...prevState,
-        [event.target.name]: event.target.value
-      }))
-    },
-    []
-  )
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value })
+  }
 
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault()
-    },
-    []
-  )
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onRun(values)
+  }
 
   return (
     <form
@@ -66,10 +59,11 @@ export const Calculator = ({ onRun }) => {
     >
       <Card>
         <CardHeader
-          subheader='Choose the operation and run'
+          subheader='Choose an operation and run'
           title='Calculator'
         />
         <CardContent sx={{ pt: 0 }}>
+          {error && <Alert severity='error'>{error.message}</Alert>}
           <Box sx={{ m: -1.5 }}>
             <Grid
               container
@@ -82,7 +76,7 @@ export const Calculator = ({ onRun }) => {
                 <TextField
                   fullWidth
                   label='Operand A'
-                  name='operandA'
+                  name='firstParam'
                   onChange={handleChange}
                   required
                   value={values.firstParam}
@@ -112,25 +106,25 @@ export const Calculator = ({ onRun }) => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid
+              {values.operationType !== 'square_root' && <Grid
                 xs={12}
                 md={4}
-              >
+                                                         >
                 <TextField
                   fullWidth
                   label='Operand B'
-                  name='operandB'
+                  name='secondParam'
                   onChange={handleChange}
                   required
                   value={values.secondParam}
                 />
-              </Grid>
+              </Grid>}
             </Grid>
           </Box>
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant='contained' onClick={() => onRun(values)}>
+          <Button type='submit' variant='contained'>
             Run
           </Button>
         </CardActions>
