@@ -14,7 +14,7 @@ export const items = [
     )
   },
   {
-    title: 'Records',
+    title: 'My records',
     path: '/records',
     icon: (
       <SvgIcon fontSize='small'>

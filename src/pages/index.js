@@ -6,6 +6,7 @@ import { Calculator } from 'src/sections/calculator/calculator'
 import { calculateBasic, calculateRandom } from 'src/services/calculator-service'
 import { CalculatorResult } from 'src/sections/calculator/calculator-result'
 import { CalculatorRandom } from 'src/sections/calculator/calculator-random'
+import { useAuth } from 'src/hooks/use-auth'
 
 const TOO_MANY_REQUESTS_HTTP_STATUS = 429
 const BAD_REQUEST_HTTP_STATUS = 400
@@ -15,6 +16,8 @@ const CalculatorHome = () => {
   const [result, setResult] = useState()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
+
+  const { user } = useAuth()
 
   function getCalculationFn (type) {
     return type === 'basic' ? calculateBasic : calculateRandom
@@ -65,7 +68,7 @@ const CalculatorHome = () => {
           <Stack spacing={3}>
             <div>
               <Typography variant='h4'>
-                Calculator
+                Hi {user.username}!
               </Typography>
               {error && <Alert severity='error'>{error.message}</Alert>}
             </div>

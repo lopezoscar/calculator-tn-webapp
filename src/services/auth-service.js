@@ -20,4 +20,5 @@ export const login = async ({ username, password }) => {
 
 export const logout = () => {
   window.localStorage.removeItem('accessToken')
+  window.localStorage.removeItem('user')
 }
