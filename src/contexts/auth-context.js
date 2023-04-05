@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { login, logout } from '../services/auth-service'
+import { login, logout, register } from '../services/auth-service'
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT'
+  SIGN_OUT: 'SIGN_OUT',
+  SIGN_UP: 'SIGN_UP'
 }
 
 const initialState = {
@@ -35,6 +36,15 @@ const handlers = {
     }
   },
   [HANDLERS.SIGN_IN]: (state, action) => {
+    const user = action.payload
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      user
+    }
+  },
+  [HANDLERS.SIGN_UP]: (state, action) => {
     const user = action.payload
 
     return {
@@ -123,7 +133,22 @@ export const AuthProvider = (props) => {
   }
 
   const signUp = async (username, password) => {
-    throw new Error('Sign up is not implemented')
+    try {
+      const response = await register({ username, password })
+      window.localStorage.setItem('accessToken', response.accessToken)
+      window.localStorage.setItem('user', JSON.stringify({ userId: response.userId, username }))
+      dispatch({
+        type: HANDLERS.SIGN_UP,
+        payload: { userId: response.userId, username }
+      })
+      return
+    } catch (error) {
+      dispatch({
+        type: HANDLERS.SIGN_UP,
+        payload: {}
+      })
+      throw new Error('Please check your username and password')
+    }
   }
 
   const signOut = () => {
