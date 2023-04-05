@@ -31,10 +31,6 @@ const operations = [
   {
     value: 'square_root',
     label: 'Square Root'
-  },
-  {
-    value: 'random_string',
-    label: 'Random String'
   }
 ]
 
