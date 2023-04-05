@@ -145,9 +145,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color='error'
@@ -172,7 +169,7 @@ const Page = () => {
                   sx={{ mt: 3 }}
                 >
                   <div>
-                    You can use username <b>calc</b> and password <b>calc</b>
+                    You can use username <b>calc</b> and password <b>calc</b> or register a new user
                   </div>
                 </Alert>
               </form>
