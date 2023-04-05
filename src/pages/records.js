@@ -1,110 +1,34 @@
 import { useCallback, useMemo, useState } from 'react'
 import Head from 'next/head'
-import { subDays, subHours } from 'date-fns'
-import PlusIcon from '@heroicons/react/24/solid/PlusIcon'
-import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material'
+import { Box, Container, Stack, Typography } from '@mui/material'
 import { useSelection } from 'src/hooks/use-selection'
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout'
-import { CustomersTable } from 'src/sections/customer/customers-table'
-import { CustomersSearch } from 'src/sections/customer/customers-search'
-import { applyPagination } from 'src/utils/apply-pagination'
+import { RecordsTable } from 'src/sections/records/records-table'
+import { RecordsSearch } from 'src/sections/records/records-search'
 
-const now = new Date()
-// const data = []
-const data =
-  [
-    {
-      _id: '6429bf1ce59703a8aa9f6275',
-      operation: 'multiplication',
-      operationResponse: 200,
-      firstParam: 10,
-      secondParam: 20,
-      userId: '642999749f57ee9aa15d6fe9',
-      active: false,
-      date: '2023-04-02T17:45:00.760Z'
-    },
-    {
-      _id: '6429bf44833e14453f050171',
-      operation: 'random_string',
-      userId: '642999749f57ee9aa15d6fe9',
-      operationResponse: '8Gp',
-      active: false,
-      date: '2023-04-02T17:45:40.845Z'
-    },
-    {
-      _id: '6429c49a8fb1e6e1b6d05c51',
-      operation: 'division',
-      operationResponse: Infinity,
-      firstParam: 10,
-      secondParam: 0,
-      userId: '642999749f57ee9aa15d6fe9',
-      active: true,
-      date: '2023-04-02T18:08:26.775Z'
-    },
-    {
-      _id: '6429c4cada760e9618f89c35',
-      operation: 'division',
-      operationResponse: Infinity,
-      firstParam: 10,
-      secondParam: 0,
-      userId: '642999749f57ee9aa15d6fe9',
-      active: true,
-      date: '2023-04-02T18:09:14.976Z'
-    },
-    {
-      _id: '6429c551206b5bb4a2c5068c',
-      operation: 'division',
-      operationResponse: { code: 'VALIDATION_ERROR' },
-      firstParam: 10,
-      secondParam: 0,
-      userId: '642999749f57ee9aa15d6fe9',
-      active: true,
-      date: '2023-04-02T18:11:29.842Z'
-    },
-    {
-      _id: '642a081d72791b18d352b985',
-      operation: 'division',
-      operationResponse: 10,
-      firstParam: 10,
-      secondParam: 1,
-      userId: '642999749f57ee9aa15d6fe9',
-      active: false,
-      date: '2023-04-02T22:56:29.155Z'
-    },
-    {
-      _id: '642a08247bdfd9546913f9ee',
-      operation: 'random_string',
-      userId: '642999749f57ee9aa15d6fe9',
-      operationResponse: '*0J',
-      active: true,
-      date: '2023-04-02T22:56:36.502Z'
-    }
-  ]
+import useRecords from 'src/hooks/use-records'
+import { deleteRecord } from 'src/services/records-service'
 
-const useCustomers = (page, rowsPerPage) => {
+const useRecordsIds = (records) => {
   return useMemo(
     () => {
-      return applyPagination(data, page, rowsPerPage)
+      return records.map((record) => record._id)
     },
-    [page, rowsPerPage]
-  )
-}
-
-const useCustomerIds = (customers) => {
-  return useMemo(
-    () => {
-      return customers.map((customer) => customer.id)
-    },
-    [customers]
+    [records]
   )
 }
 
 const Page = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const customers = useCustomers(page, rowsPerPage)
-  const customersIds = useCustomerIds(customers)
-  const customersSelection = useSelection(customersIds)
+
+  const [sort, setSort] = useState()
+
+  const [onDeleteRecord, setOnDeleteRecord] = useState(null)
+
+  const { data: records } = useRecords({ page, limit: rowsPerPage, sort, onDeleteRecord })
+  const recordIds = useRecordsIds(records)
+  const recordsSelection = useSelection(recordIds)
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -120,11 +44,26 @@ const Page = () => {
     []
   )
 
+  const handleOnDeleteRecord = async ({ recordId }) => {
+    console.log('deleting record', recordId)
+    try {
+      await deleteRecord({ recordId })
+      setOnDeleteRecord(recordId)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleSortChange = (newOrderBy) => {
+    console.log('sort', newOrderBy)
+    setSort(newOrderBy)
+  }
+
   return (
     <>
       <Head>
         <title>
-          Customers
+          Records
         </title>
       </Head>
       <Box
@@ -147,15 +86,19 @@ const Page = () => {
                 </Typography>
               </Stack>
             </Stack>
-            <CustomersSearch />
-            <CustomersTable
-              count={data.length}
-              items={customers}
+            <RecordsSearch />
+            <RecordsTable
+              count={-1}
+              items={records}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
+              onDeleteRecord={handleOnDeleteRecord}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={recordsSelection.selected}
+              order='desc'
+              orderBy='date'
+              onSortChange={handleSortChange}
             />
           </Stack>
         </Container>

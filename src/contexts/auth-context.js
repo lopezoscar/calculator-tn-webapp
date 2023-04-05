@@ -151,7 +151,7 @@ export const AuthProvider = (props) => {
     })
   }
 
-  const signUp = async (email, name, password) => {
+  const signUp = async (username, password) => {
     throw new Error('Sign up is not implemented')
   }
 

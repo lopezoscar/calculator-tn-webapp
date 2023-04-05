@@ -1,35 +1,45 @@
 import PropTypes from 'prop-types'
-import { format } from 'date-fns'
 import TrashIcon from '@heroicons/react/24/solid/TrashIcon'
+import { useState } from 'react'
+
 import {
   IconButton,
   SvgIcon,
-  Avatar,
   Box,
   Card,
-  Checkbox,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  TableSortLabel
 } from '@mui/material'
-import { Scrollbar } from 'src/components/scrollbar'
-import { getInitials } from 'src/utils/get-initials'
+import { visuallyHidden } from '@mui/utils'
 
-export const CustomersTable = (props) => {
+import { Scrollbar } from 'src/components/scrollbar'
+
+export const RecordsTable = (props) => {
   const {
-    count = 0,
+    count = -1,
     items = [],
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    selected = []
+    onDeleteRecord = () => {},
+    selected = [],
+    orderBy = 'date',
+    onSortChange = () => {}
   } = props
+
+  const [order, setOrder] = useState('asc')
+
+  const createSortHandler = (newOrderBy) => (event) => {
+    const newOrder = order === 'asc' ? 'desc' : 'asc'
+    onSortChange(`${newOrder}_${newOrderBy}`)
+    setOrder(newOrder)
+  }
 
   return (
     <Card>
@@ -48,7 +58,16 @@ export const CustomersTable = (props) => {
                   Operation Response
                 </TableCell>
                 <TableCell>
-                  Date
+                  <TableSortLabel
+                    active={orderBy === 'date'}
+                    direction={order}
+                    onClick={createSortHandler('date')}
+                  >
+                    Date
+                    <Box component='span' sx={visuallyHidden}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </Box>
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
                   Delete
@@ -77,7 +96,7 @@ export const CustomersTable = (props) => {
                       {record.date}
                     </TableCell>
                     <TableCell>
-                      <IconButton>
+                      <IconButton onClick={() => onDeleteRecord({ recordId: record._id })}>
                         <SvgIcon fontSize='small'>
                           <TrashIcon />
                         </SvgIcon>
@@ -103,7 +122,7 @@ export const CustomersTable = (props) => {
   )
 }
 
-CustomersTable.propTypes = {
+RecordsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,
@@ -114,5 +133,7 @@ CustomersTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
+  orderBy: PropTypes.string,
+  onSortChange: PropTypes.func
 }

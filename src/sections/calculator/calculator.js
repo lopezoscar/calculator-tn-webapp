@@ -11,33 +11,34 @@ import {
   Unstable_Grid2 as Grid
 } from '@mui/material'
 
-const states = [
+const operations = [
   {
-    value: 'alabama',
-    label: 'Alabama'
+    value: 'addition',
+    label: 'Addition'
   },
   {
-    value: 'new-york',
-    label: 'New York'
+    value: 'subtraction',
+    label: 'Subtraction'
   },
   {
-    value: 'san-francisco',
-    label: 'San Francisco'
+    value: 'multiplication',
+    label: 'Multiplication'
   },
   {
-    value: 'los-angeles',
-    label: 'Los Angeles'
+    value: 'division',
+    label: 'Division'
+  },
+  {
+    value: 'square_root',
+    label: 'Square Root'
   }
 ]
 
-export const AccountProfileDetails = () => {
+export const Calculator = ({ onRun }) => {
   const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'los-angeles',
-    country: 'USA'
+    firstParam: 10,
+    secondParam: 20,
+    operationType: 'addition'
   })
 
   const handleChange = useCallback(
@@ -76,28 +77,52 @@ export const AccountProfileDetails = () => {
             >
               <Grid
                 xs={12}
-                md={6}
+                md={4}
               >
                 <TextField
                   fullWidth
                   label='Operand A'
-                  name='firstName'
+                  name='operandA'
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  value={values.firstParam}
                 />
               </Grid>
               <Grid
                 xs={12}
-                md={6}
+                md={4}
+              >
+                <TextField
+                  fullWidth
+                  label='Operation type'
+                  name='operationType'
+                  onChange={handleChange}
+                  required
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.operationType}
+                >
+                  {operations.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid
+                xs={12}
+                md={4}
               >
                 <TextField
                   fullWidth
                   label='Operand B'
-                  name='lastName'
+                  name='operandB'
                   onChange={handleChange}
                   required
-                  value={values.lastName}
+                  value={values.secondParam}
                 />
               </Grid>
             </Grid>
@@ -105,7 +130,7 @@ export const AccountProfileDetails = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant='contained'>
+          <Button variant='contained' onClick={() => onRun(values)}>
             Run
           </Button>
         </CardActions>
