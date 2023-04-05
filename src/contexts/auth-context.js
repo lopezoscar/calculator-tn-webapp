@@ -82,12 +82,7 @@ export const AuthProvider = (props) => {
     }
 
     if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      }
+      const user = JSON.parse(window.localStorage.getItem('user'))
 
       dispatch({
         type: HANDLERS.INITIALIZE,
@@ -111,24 +106,20 @@ export const AuthProvider = (props) => {
   const signIn = async (username, password) => {
     try {
       const response = await login({ username, password })
-      window.localStorage.setItem('authenticated', 'true')
       window.localStorage.setItem('accessToken', response.accessToken)
       window.localStorage.setItem('user', JSON.stringify({ userId: response.userId, username }))
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: { userId: response.userId, username }
+      })
+      return
     } catch (error) {
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: {}
+      })
       throw new Error('Please check your username and password')
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    }
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    })
   }
 
   const signUp = async (username, password) => {
