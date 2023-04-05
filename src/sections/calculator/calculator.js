@@ -8,7 +8,6 @@ import {
   CardHeader,
   Divider,
   TextField,
-  Alert,
   Unstable_Grid2 as Grid
 } from '@mui/material'
 
@@ -32,10 +31,14 @@ const operations = [
   {
     value: 'square_root',
     label: 'Square Root'
+  },
+  {
+    value: 'random_string',
+    label: 'Random String'
   }
 ]
 
-export const Calculator = ({ onRun, error }) => {
+export const Calculator = ({ onRun }) => {
   const [values, setValues] = useState({
     firstParam: 5,
     secondParam: 5,
@@ -48,7 +51,7 @@ export const Calculator = ({ onRun, error }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    onRun(values)
+    onRun({ type: 'basic', params: values })
   }
 
   return (
@@ -63,25 +66,25 @@ export const Calculator = ({ onRun, error }) => {
           title='Calculator'
         />
         <CardContent sx={{ pt: 0 }}>
-          {error && <Alert severity='error'>{error.message}</Alert>}
           <Box sx={{ m: -1.5 }}>
             <Grid
               container
               spacing={3}
             >
-              <Grid
-                xs={12}
-                md={4}
-              >
-                <TextField
-                  fullWidth
-                  label='Operand A'
-                  name='firstParam'
-                  onChange={handleChange}
-                  required
-                  value={values.firstParam}
-                />
-              </Grid>
+              {values.operationType !== 'random_string' &&
+                <Grid
+                  xs={12}
+                  md={4}
+                >
+                  <TextField
+                    fullWidth
+                    label='Operand A'
+                    name='firstParam'
+                    onChange={handleChange}
+                    required
+                    value={values.firstParam}
+                  />
+                </Grid>}
               <Grid
                 xs={12}
                 md={4}
@@ -106,19 +109,21 @@ export const Calculator = ({ onRun, error }) => {
                   ))}
                 </TextField>
               </Grid>
-              {values.operationType !== 'square_root' && <Grid
-                xs={12}
-                md={4}
-                                                         >
-                <TextField
-                  fullWidth
-                  label='Operand B'
-                  name='secondParam'
-                  onChange={handleChange}
-                  required
-                  value={values.secondParam}
-                />
-              </Grid>}
+
+              {values.operationType !== 'square_root' && values.operationType !== 'random_string' &&
+                <Grid
+                  xs={12}
+                  md={4}
+                >
+                  <TextField
+                    fullWidth
+                    label='Operand B'
+                    name='secondParam'
+                    onChange={handleChange}
+                    required
+                    value={values.secondParam}
+                  />
+                </Grid>}
             </Grid>
           </Box>
         </CardContent>

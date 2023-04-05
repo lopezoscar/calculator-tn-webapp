@@ -2,10 +2,11 @@ import {
   Box,
   Card,
   CardContent,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material'
 
-export const CalculatorResult = ({ result }) => (
+export const CalculatorResult = ({ result, loading }) => (
   <Card>
     <CardContent>
       <Box
@@ -25,7 +26,7 @@ export const CalculatorResult = ({ result }) => (
           color='text.secondary'
           variant='h5'
         >
-          {result}
+          {loading ? <CircularProgress /> : result}
         </Typography>
       </Box>
     </CardContent>
