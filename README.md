@@ -21,4 +21,7 @@ NEXT_PUBLIC_API_URL=http://localhost:4000
 
 This project is running on Vercel with an automatic deployment that is listening on master. 
 
-Please click here to see the webpage: [Calculator](https://calculator-tn-webapp.vercel.app)
+WEBPAGE: [https://calculator-tn-webapp.vercel.app](https://calculator-tn-webapp.vercel.app)
+
+API URL [https://i7q8kvf148.execute-api.us-east-1.amazonaws.com/production/](https://i7q8kvf148.execute-api.us-east-1.amazonaws.com/production/)
+
