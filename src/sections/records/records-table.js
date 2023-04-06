@@ -64,6 +64,12 @@ export const RecordsTable = (props) => {
                   Operation Response
                 </TableCell>
                 <TableCell>
+                  Cost
+                </TableCell>
+                <TableCell>
+                  User Balance
+                </TableCell>
+                <TableCell>
                   <TableSortLabel
                     active={orderBy === 'date'}
                     direction={order}
@@ -97,6 +103,12 @@ export const RecordsTable = (props) => {
                     </TableCell>
                     <TableCell>
                       {'' + record.operationResponse}
+                    </TableCell>
+                    <TableCell>
+                      {record.cost}
+                    </TableCell>
+                    <TableCell>
+                      {record.userBalance}
                     </TableCell>
                     <TableCell>
                       {record.date}
