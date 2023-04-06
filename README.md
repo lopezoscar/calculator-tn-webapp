@@ -19,6 +19,8 @@ NEXT_PUBLIC_API_URL=http://localhost:4000
 
 ## Production
 
+> IMPORTANT: Register a new user in the webpage to use the project or use calc, calc (there is no validation on password for the sake of simpliciy).
+
 This project is running on Vercel with an automatic deployment that is listening on master. 
 
 WEBPAGE: [https://calculator-tn-webapp.vercel.app](https://calculator-tn-webapp.vercel.app)
