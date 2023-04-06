@@ -24,6 +24,9 @@ const CalculatorHome = () => {
   }
 
   const handleRunCalculation = async ({ type, params }) => {
+    if (loading) {
+      return
+    }
     setLoading(true)
     console.log('params', params)
     try {
@@ -31,6 +34,7 @@ const CalculatorHome = () => {
       console.log('response', response)
       setResult(response?.data.operationResponse)
       setLoading(false)
+      setError(null)
     } catch (err) {
       console.log('err', err)
       setLoading(false)
