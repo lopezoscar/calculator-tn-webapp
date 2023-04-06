@@ -8,7 +8,7 @@ import {
   Alert,
   Box,
   Button,
-  FormHelperText,
+  CircularProgress,
   Link,
   Stack,
   Tab,
@@ -23,6 +23,9 @@ const Page = () => {
   const router = useRouter()
   const auth = useAuth()
   const [method, setMethod] = useState('username')
+
+  const [loading, setLoading] = useState(false)
+
   const formik = useFormik({
     initialValues: {
       username: 'calc',
@@ -41,9 +44,12 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
+        setLoading(true)
         await auth.signIn(values.username, values.password)
         router.push('/')
+        setLoading(false)
       } catch (err) {
+        setLoading(false)
         helpers.setStatus({ success: false })
         helpers.setErrors({ submit: err.message })
         helpers.setSubmitting(false)
@@ -154,15 +160,17 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
-                <Button
-                  fullWidth
-                  size='large'
-                  sx={{ mt: 3 }}
-                  type='submit'
-                  variant='contained'
-                >
-                  Continue
-                </Button>
+                {loading && <CircularProgress />}
+                {!loading &&
+                  <Button
+                    fullWidth
+                    size='large'
+                    sx={{ mt: 3 }}
+                    type='submit'
+                    variant='contained'
+                  >
+                    Continue
+                  </Button>}
                 <Alert
                   color='primary'
                   severity='info'
