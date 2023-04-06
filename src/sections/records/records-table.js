@@ -123,6 +123,14 @@ export const RecordsTable = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+        SelectProps={{
+          disabled: items.length === 0
+        }}
+        nextIconButtonProps={
+           {
+             disabled: items.length === 0
+           }
+        }
       />
     </Card>
   )
