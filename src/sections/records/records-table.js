@@ -13,7 +13,9 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TableSortLabel
+  TableSortLabel,
+  Alert,
+  Typography
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 
@@ -30,7 +32,9 @@ export const RecordsTable = (props) => {
     onDeleteRecord = () => {},
     selected = [],
     orderBy = 'date',
-    onSortChange = () => {}
+    onSortChange = () => {},
+    loading = false,
+    error
   } = props
 
   const [order, setOrder] = useState('asc')
@@ -43,6 +47,8 @@ export const RecordsTable = (props) => {
 
   return (
     <Card>
+      {error && <Alert severity='error'>{error.message}</Alert>}
+      {loading && <Typography>Loading records...</Typography>}
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -135,5 +141,7 @@ RecordsTable.propTypes = {
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
   orderBy: PropTypes.string,
-  onSortChange: PropTypes.func
+  onSortChange: PropTypes.func,
+  loading: PropTypes.bool,
+  error: PropTypes.shape({ message: PropTypes.string })
 }
