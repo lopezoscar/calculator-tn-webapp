@@ -4,14 +4,14 @@ import { getRecords } from 'src/services/records-service'
 const BAD_REQUEST_HTTP_STATUS = 400
 const UNAUTHORIZED_HTTP_STATUS = 401
 
-const useRecords = ({ page, limit, sort, onDeleteRecord }) => {
+const useRecords = ({ page, limit, sort, search, onDeleteRecord }) => {
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
-    getRecords({ page: page + 1, limit, sort })
+    getRecords({ page: page + 1, limit, sort, search })
       .then(response => {
         console.log('response', response)
         setData(response?.data)
@@ -31,7 +31,7 @@ const useRecords = ({ page, limit, sort, onDeleteRecord }) => {
         setError({ message: 'Oops! There was an error getting records. Please try again or check logs' })
         setLoading(false)
       })
-  }, [page, limit, sort, onDeleteRecord])
+  }, [page, limit, sort, search, onDeleteRecord])
 
   return { data, loading, error }
 }

@@ -22,10 +22,11 @@ const Page = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [sort, setSort] = useState()
+  const [search, setSearch] = useState()
 
   const [onDeleteRecord, setOnDeleteRecord] = useState(null)
 
-  const { data: records, loading, error: errorRecords } = useRecords({ page, limit: rowsPerPage, sort, onDeleteRecord })
+  const { data: records, loading, error: errorRecords } = useRecords({ page, limit: rowsPerPage, sort, search, onDeleteRecord })
   const recordIds = useRecordsIds(records)
   const recordsSelection = useSelection(recordIds)
 
@@ -58,6 +59,10 @@ const Page = () => {
     setSort(newOrderBy)
   }
 
+  const handleSearch = (search) => {
+    setSearch(search)
+  }
+
   return (
     <>
       <Head>
@@ -85,7 +90,7 @@ const Page = () => {
                 </Typography>
               </Stack>
             </Stack>
-            <RecordsSearch />
+            <RecordsSearch onSearch={handleSearch} />
             <RecordsTable
               count={-1}
               items={records}
